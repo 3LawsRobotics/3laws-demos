@@ -1,0 +1,52 @@
+# User specific development files and folders
+## Generic
+.cache
+.vscode
+.codechecker
+.devcontainer.json
+.deploy/
+.tmp/
+.build/
+.temp/
+.packages/
+.reports/
+.backend/
+.data/
+doc/
+#jetbrains IDEs
+.idea
+## Python
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+## Jupyter Notebook
+.ipynb_checkpoints
+wandb/
+
+# Build and run artifacts
+## Generic
+build/
+log/
+logs/
+install/
+devel/
+## C++
+CMakeUserPresets.json
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
+## Python
+__pycache__
+*.egg*/
+.thumbs
+.pytest_cache
+.mypy_cache
+## ROS
+**/ROS1/src/CMakeLists.txt
+.catkin_workspace
