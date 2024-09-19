@@ -11,11 +11,16 @@
 
 ## Requirements
 
-This demo has been tested in `Ubuntu 22.04`, with `ROS2 Humble` and `Gazebo Fortress`.
+This demo has been tested in `Ubuntu 22.04`, with `ROS2 Humble` and `Gazebo Fortress`. Make sure to install the following dependencies:
 
-1. Install ROS2 Humble (the `ros-humble-desktop` package): https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
-2. Install the new Gazebo Sim (`Fortress` version): https://gazebosim.org/docs/fortress/install_ubuntu/
-3. Install xterm: `sudo apt install xterm`
+1. ROS2 Humble (the `ros-humble-desktop` package): https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+2. Gazebo Sim (`Fortress` version): https://gazebosim.org/docs/fortress/install_ubuntu/
+3. xterm: `sudo apt install xterm`
+
+## Notes
+* For some reason, the gazebo physics make the robot wheels skid at the bigging of the simulation. Once you drive a couple meters away from the initial location, the robot should behave as expected.
+
+* In this configuration of the Supervisor, obstacles are detected via the laserscan. This means the supervisor has no information about direction the workers are walking towards. Given such perception modality, the supervisor will not let you drive into the workers, and stop or backup if a worker is getting close to it, but it won't prevent adversarial workers from colliding with it. Ensuring avoidance of adversarial agents is a capability of **3Laws Supervisor Pro**. Contact info@3laws.io to inquire about a demo of those capabilities.
 
 ## Getting started
 
@@ -75,4 +80,4 @@ ln -sf "$HOME/ros_ws/src/3laws-demos/lll_warehouse_demo/config/amr_supervisor_co
 3laws control-panel run
 ```
 
-1. You can now navigate to the control panel interface in your favorite browser at http://localhost:8000/, and follow the [control panel documentation](https://docs.3laws.io/en/latest/sources/user_guide/control_panel.html).
+3. You can now navigate to the control panel interface in your favorite browser at http://localhost:8000/, and follow the [control panel documentation](https://docs.3laws.io/en/latest/sources/user_guide/control_panel.html).
