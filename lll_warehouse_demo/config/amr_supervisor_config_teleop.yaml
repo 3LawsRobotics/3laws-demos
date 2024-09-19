@@ -1,0 +1,146 @@
+## 3Laws Robot Diagnostic Module configuration
+
+version: 2.0.0
+
+# Supervisor interface
+interface:
+  process_niceness: 0
+  retimestamp: always
+  project_to_se2: true
+  world_frame_id: odom
+  resource_timer_rate: 0.5s
+  log_upload: false
+  ros_topics_info:
+    cmd_vel_des:
+      type: geometry_msgs/Twist
+    odom:
+      type: nav_msgs/Odometry
+    scan:
+      type: sensor_msgs/LaserScan
+
+# Credentials
+credentials:
+  robot_id: amr
+  license_token: ""
+
+# Robot description
+robot_description:
+  kinematic_model:
+    rigid_body:
+      base_frame_id: base_frame
+      geometry:
+        shape_type: box
+        shape_params: [0.9, 0.64, 0.3]
+        pose:
+          r3:
+            x: 0.
+            y: 0.
+            z: 0.15
+      frames:
+        test:
+          so3:
+            w: 1.
+            x: 0.
+            y: 0.
+            z: 0.
+
+  dynamical_model:
+    model_type: differential_drive3
+    state_domain:
+      simple: true
+      ub: [.inf, .inf, .inf]
+      lb: [-.inf, -.inf, -.inf]
+    input_domain:
+      simple: true
+      ub: [2., 3.1415]
+      lb: [-2., -3.1415]
+    process_noise_covariance_diagonal: [1., 1., 1.]
+    model_param: []
+
+  sensors:
+    laserscans:
+      laserscan_1:
+        interface_id: scan
+        signal_min_rate: 1s
+        specs:
+          n_rays: 361
+          angle_min: 0.
+          angle_max: 6.2831
+          range_min: 0.05
+          range_max: 10.
+          noise_one_sigma: 0.025
+        transform:
+          parent_frame_id: base_frame
+          pose:
+            r3:
+              x: 0.
+              y: 0.
+              z: 0.27
+
+  localization:
+    state_estimation:
+      interface_id: odom
+      signal_min_rate: 1s
+      state_size: 3
+      measurement_covariance_diagonal: [0.05, 0.05, 0.05]
+
+  control:
+    actuators:
+      combined:
+        interface_id: cmd_vel_des
+        input_size: 2
+        signal_min_rate: 1s
+        mask: [0, 2]
+
+# RAM
+runtime_assurance_module:
+  active: true
+  use_localization: true
+  filtered_input_interface_id: cmd_vel
+  input_filters:
+    active: true
+    filter_rate: 10hz
+    qp:
+      aggressiveness: 1.0
+      conservativeness: 0.
+      relax_cost: [1e3]
+      input_cost_normalization: [1., 1.]
+      input_cost_scaling: 10.
+  kernel_generators: ~
+  safety_maps:
+    collision_distance_threshold: 0.2
+    unicycle_delta: 0.3
+    unicycle_angular_range: 1.6
+    laserscan:
+      min_uniform_pts: 5
+      downsample_factor: 1
+      accept_with_wrong_size: false
+      max_pts: 15
+      closure_mode: opened
+      distance_mode: SET_AT_INFINITY
+  failsafe:
+    active: true
+    can_resume_from_failure: true
+    failure_command_mode: passthrough
+    max_signals_delay: 1s
+
+#RDM
+robot_diagnostic_module:
+  active: false
+  extra_stack_info: ~
+  metric_modules:
+    dynamic_consistency:
+      active: true
+      uncertainty_threshold: 2.
+      use_state_signal_uncertainty: false
+    behavior_safety:
+      active: true
+      min_safety_value: 0.
+
+  diagnostic:
+    timeout_factor: 2
+    max_signals_delay: 10ms
+  upload:
+    metrics: true
+    system_characterization: false
+    metadata: true
