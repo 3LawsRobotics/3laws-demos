@@ -50,3 +50,4 @@ __pycache__
 ## ROS
 **/ROS1/src/CMakeLists.txt
 .catkin_workspace
+COLCON_IGNORE
